@@ -138,6 +138,7 @@ class MovieListSchema(BaseModel):
     title: str
     slug: Optional[str] = None
     genres: List[str] = []
+    description: Optional[str] = None
     rating: float = 0.0
     release_year: Optional[int] = None
     poster: Optional[str] = None
@@ -154,6 +155,7 @@ class TVShowListSchema(BaseModel):
     title: str
     slug: Optional[str] = None
     genres: List[str] = []
+    description: Optional[str] = None
     rating: float = 0.0
     release_year: Optional[int] = None
     poster: Optional[str] = None
