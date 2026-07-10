@@ -168,6 +168,14 @@ class TVShowListSchema(BaseModel):
     total_episodes: int = 0
     rip: str = "Unknown"
 
+class BrokenLinkReportIn(BaseModel):
+    device_id: str = Field(..., description="Anonymous client device ID")
+    tmdb_id: int = Field(..., description="TMDB ID of the movie/show")
+    media_type: str = Field(..., description="movie or tv")
+    title: str = Field(..., description="Title being reported")
+    issue: str = Field(..., description="e.g. 'Video not playing', 'Audio missing', 'Wrong subtitle'")
+    message: Optional[str] = Field(None, description="Extra details from the viewer")
+
 class HomeSectionSchema(BaseModel):
     title: str
     enabled: bool = True
@@ -177,3 +185,4 @@ class HomeSectionSchema(BaseModel):
     layout: str = "slider"  # slider, grid
     items: List[CollectionItem] = []
     position: Optional[int] = None
+    
