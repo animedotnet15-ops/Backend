@@ -128,3 +128,46 @@ async def send_bulk_log_report(metadata_info, file_count, mode="Manual Bulk"):
 
     except Exception as e:
         LOGGER.error(f"Error sending bulk log report: {e}")
+
+async def send_broken_link_report(report: dict):
+    """
+    Sends a viewer-submitted 'broken link / playback issue' report.
+    report = {tmdb_id, media_type, title, issue, message, device_id}
+
+    NOTE: this uses REPORT_CHANNEL specifically (not settings.logChannel),
+    so it always goes to the channel set in config.env regardless of what
+    the admin panel's "Log Channel" is set to.
+    """
+    report_channel = Telegram.REPORT_CHANNEL
+
+    if not report_channel:
+        LOGGER.warning("No REPORT_CHANNEL configured for broken-link reports.")
+        return
+
+    try:
+        if isinstance(report_channel, str) and (report_channel.startswith('-') or report_channel.isdigit()):
+            report_channel = int(report_channel)
+    except Exception:
+        pass
+
+    try:
+        path_type = "mov" if report.get("media_type") == "movie" else "ser"
+        link = f"{Telegram.FRONTEND_LINK}/{path_type}/{report.get('tmdb_id')}"
+
+        text = (
+            f"<b>🚩 Broken Link / Playback Report</b>\n\n"
+            f"<b>🎬 Title:</b> <code>{report.get('title')}</code>\n"
+            f"<b>🆔 TMDB ID:</b> <code>{report.get('tmdb_id')}</code>\n"
+            f"<b>⚠️ Issue:</b> <code>{report.get('issue')}</code>\n"
+            f"<b>💬 Message:</b> {report.get('message') or '-'}\n"
+            f"<b>🔗 Link:</b> {link}"
+        )
+
+        await StreamBot.send_message(
+            chat_id=report_channel,
+            text=text,
+            parse_mode=ParseMode.HTML
+        )
+    except Exception as e:
+        LOGGER.error(f"Error sending broken link report: {e}")
+        
