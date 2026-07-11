@@ -176,6 +176,25 @@ class BrokenLinkReportIn(BaseModel):
     issue: str = Field(..., description="e.g. 'Video not playing', 'Audio missing', 'Wrong subtitle'")
     message: Optional[str] = Field(None, description="Extra details from the viewer")
 
+class WatchlistIn(BaseModel):
+    owner_id: str = Field(..., description="Anonymous device_id (from browser localStorage)")
+    tmdb_id: int = Field(..., description="TMDB ID of the movie/show")
+    media_type: str = Field(..., description="movie or tv")
+    title: str = Field(..., description="Title to display in My List")
+    poster: Optional[str] = Field(None, description="Poster image URL")
+    backdrop: Optional[str] = Field(None, description="Backdrop image URL")
+    rating: Optional[float] = Field(None, description="Rating")
+    release_year: Optional[int] = Field(None, description="Release year")
+    genres: Optional[List[str]] = Field(None, description="Genres")
+
+class ReviewIn(BaseModel):
+    owner_id: str = Field(..., description="Anonymous device_id (from browser localStorage)")
+    tmdb_id: int = Field(..., description="TMDB ID of the movie/show")
+    media_type: str = Field(..., description="movie or tv")
+    reviewer_name: str = Field(..., description="Display name shown with the review")
+    rating: int = Field(..., ge=1, le=5, description="Star rating, 1-5")
+    review_text: Optional[str] = Field(None, description="Optional written review")
+
 class HomeSectionSchema(BaseModel):
     title: str
     enabled: bool = True
@@ -185,4 +204,4 @@ class HomeSectionSchema(BaseModel):
     layout: str = "slider"  # slider, grid
     items: List[CollectionItem] = []
     position: Optional[int] = None
-    
+                  
