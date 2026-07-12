@@ -130,6 +130,7 @@ class SettingsSchema(BaseModel):
     useShortenerExternal: bool = Field(default=True, description="Toggle shortener for External Links")
     showQuality: bool = Field(default=True, description="Toggle to show quality tags")
     showSize: bool = Field(default=True, description="Toggle to show file sizes")
+    showRatingsReviews: bool = Field(default=True, description="Toggle to show the Ratings & Reviews section")
     telegramCaption: Optional[str] = Field(None, description="Custom caption for telegram bot files")
     
 class MovieListSchema(BaseModel):
@@ -204,4 +205,4 @@ class HomeSectionSchema(BaseModel):
     layout: str = "slider"  # slider, grid
     items: List[CollectionItem] = []
     position: Optional[int] = None
-                  
+    
